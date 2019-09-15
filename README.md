@@ -1,68 +1,70 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Briefing
 
-## Available Scripts
+This application has the objective to be a consult material in the future. We are using ReactJS, Architecture Flux and Redux.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## Dependencies file and Configuration file
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- Start with `yarn init -y`
+- Paste this [package.json]() inside your app root folder and run `yarn`
+- Then run `yarn eslint --init`
+- Delete _package-json_ created by _npm_
+- Run `yarn` again
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+---
 
-### `npm test`
+## Routes
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Install react-router-dom with `yarn add react-router-dom`
+- Create `routes.js` inside src
+  - src/routes.js
+- Then `import { Switch, Route } from 'react-router-dom'`
+  - Switch allow the application to call one route at a time
 
-### `npm run build`
+### Create Pages - Part I
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Inside src create a folder named pages
+  - src/pages
+- Inside pages each page has a folder with it's self index.js
+  - src/pages/Home/index.js
+  - src/pages/Cart/index.js
+- Create a Stateless component inside of each index.js
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+## Continuing Routes
+**routes.js**
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Import the pages inside `routes.js`
+    - `import Home from './pages/Home'`
+    - `import Cart from './pages/Cart'`
+- The function `Routes(){}` will return the `Switch` component outside the block
+and the `Routes` component inside
 
-### `npm run eject`
+```js
+export default function Routes() {
+  return (
+    <Switch>
+      <Route path="/" exact component={Home} />
+      <Route path="/cart" component={Cart} />
+    </Switch>
+  );
+}
+```
+- The Route to Home page **must** have the `exact` propertie
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+**App.js**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+- Import the BrowserRouter and the Routes
+  - `import { BrowserRouter } from 'react-router-dom'`
+  - `import Routes from './routes'`
+- The function `App(){}` will return the `BrowserRouter` component with `Routes`
+component inside
+```js
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes />
+    </BrowserRouter>
+  );
+}
+```
