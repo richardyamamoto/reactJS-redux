@@ -68,3 +68,14 @@ function App() {
   );
 }
 ```
+
+## Global Styles
+- Install the `styled-components` running `yarn add styled-components`
+- Inside src create a folder named `styles` with a file named `global.js`
+  - src/styles/global.js
+- Import createGlobalStyle
+  - `import { createGlobalStyle } from 'styled-components'`
+  - `export default createGlobalStyle``;`
+[global.js](https://gist.github.com/richardyamamoto/bb2b8df5b71507bb26e7f62a862cdb70)
+
+
