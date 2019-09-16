@@ -69,13 +69,43 @@ function App() {
 }
 ```
 
+---
 ## Global Styles
+
 - Install the `styled-components` running `yarn add styled-components`
 - Inside src create a folder named `styles` with a file named `global.js`
   - src/styles/global.js
 - Import createGlobalStyle
   - `import { createGlobalStyle } from 'styled-components'`
   - `export default createGlobalStyle``;`
+
 [global.js](https://gist.github.com/richardyamamoto/bb2b8df5b71507bb26e7f62a862cdb70)
 
+---
+## Components
 
+- Create a folder named `components` inside `src`
+  - src/components
+- Inside `components` each component need to have a folder with index.js and styles.js
+  - src/components/header/index.js
+  - src/components/header/styles.js
+
+**index.js**
+
+- The `function Header(){}` will return the `Container` component
+- Inside `Container` put an `img` with the logo
+- Import the component Link from react-router-dom
+  - `import { Link } from 'react-router-dom'`
+    - The Link will handle the navigation
+
+**App.js**
+
+- `import Header from './components/Header';`
+- Put the `Header` inside the function return
+
+### Icons
+
+- Install react-icons `yarn add react-icons`
+  - `import { MdShoppingBasket } from 'react-icons/md';`
+
+[Header - index.js](https://gist.github.com/richardyamamoto/d9129142072c0d788ce44a1f57012d49)
