@@ -82,7 +82,7 @@ function App() {
 [global.js](https://gist.github.com/richardyamamoto/bb2b8df5b71507bb26e7f62a862cdb70)
 
 ---
-## Components
+## Components - Header
 
 - Create a folder named `components` inside `src`
   - src/components
@@ -103,9 +103,17 @@ function App() {
 - `import Header from './components/Header';`
 - Put the `Header` inside the function return
 
+[Header - index.js](https://gist.github.com/richardyamamoto/d9129142072c0d788ce44a1f57012d49)
+
+---
 ### Icons
 
 - Install react-icons `yarn add react-icons`
   - `import { MdShoppingBasket } from 'react-icons/md';`
 
-[Header - index.js](https://gist.github.com/richardyamamoto/d9129142072c0d788ce44a1f57012d49)
+
+## Polished
+- Librarie that handles colors
+- `yarn add polished`
+  - `import { darken } from 'polished`
+    - put this way on CSS `${darken(0.03, "#7159c1")}`
