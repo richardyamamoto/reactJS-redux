@@ -202,4 +202,62 @@ export default combineReducers({
   cart,
 });
 ```
+---
+## Add Products to Cart
 
+- Inside `page/Home/index.js`
+- `import { connect } from 'react-redux';`
+ -  The connect returns another function and we call it by passing the name of the component.
+- At `src/pages/Home/index.js`, cut the `export default` and put on the end of the file, but the export going to be like this:
+```js
+export default connect()(Home)
+```
+- Always that we want to modify something at state, we are going to throw an `Action`.
+  - Action is an object with type and the content we want.
+- On this exemple the action going to be called when clicked on the button of the product and the function will receive the product as parameter.
+
+```js
+onClick={() => this.handleAddProduct(product)}
+```
+- All component that we connect with Redux receive a propertie called `dispatch`. It throw an `action` to Redux and all the reducers going to listen this dispatch.
+- This is how the function that handle the `dispatch()` looks like:
+
+```js
+handleAddProduct = product => {
+    const { dispatch } = this.props;
+
+    dispatch({
+      type: 'ADD_TO_CART',
+      product,
+    });
+  };
+```
+- The action dispatched has an object shape, and the attribute **type** is obligatory.
+- On `src/store/modules/cart/reducer.js`
+- This redeucer and all the others (if their exists) are going to receive the dispatch, and to treat this situation we use Switch Case conditional flux controller.
+
+```js
+export default function cart(state = [], action) {
+  console.log(state);
+  switch (action.type) {
+    case 'ADD_TO_CART':
+      return [...state, action.product];
+    default:
+      return state;
+  }
+}
+
+```
+- The parameter state is the previous `state` and the `action` contents all the action dispatched.
+- Because of the way Redux works and all the reducers listen to the actions, the switch case `default` returns the previus state in case of the action do not match with any case.
+- To make another component recover the action dispatched, import the `connect`
+  - `import { connect } from 'react-redux`
+  - Cut the `export default` and put it on the end of the component
+- But here we have something diferent. The `connect()` receive as a parameter the state.
+- For exemple:
+
+```js
+export default connect(state => ({
+  cartSize: state.cart.length,
+}))(Header);
+```
