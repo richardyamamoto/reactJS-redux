@@ -126,4 +126,18 @@ function App() {
 
 ---
 ## Axios
+It help us to consume API
 - Install running `yarn add axios`
+
+---
+## Format numbers
+
+To format currency we use a native lib called `Intl`. First create a folder/file in `src/util/index.js`. Exemple:
+
+```js
+export const { format: formatPrice } = new Intl.NumberFormat('pt-BR', {
+  style: 'currency',
+  currency: 'BRL',
+});
+```
+to use it, import the renamed function `import {formatPrice} from '../../util''` an use as a function `formatPrice()`
