@@ -304,6 +304,11 @@ export default store;
     - It must be imported before the `store` importation.
 - Reactotron allow us to monitor the `actions` and more than that, we can use the
 **State** functionality to:
+<<<<<<< HEAD
   - Create subscriptions and turn things a lot easier.
     - Exemple: `cart` will subscribe the Cart reducer.
+=======
+  - Create subscriptions and turn things a lot easier
+    - Exemple: `cart` will subscribe the Cart reducer
+>>>>>>> 1e2e3fbbc58e49dc304722cb4e720ca38d4759ec
   - Take snapshots from the current state.
