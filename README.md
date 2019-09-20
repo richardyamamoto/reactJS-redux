@@ -117,3 +117,13 @@ function App() {
 - `yarn add polished`
   - `import { darken } from 'polished`
     - put this way on CSS `${darken(0.03, "#7159c1")}`
+
+---
+## Json Server
+- Install running `yarn global add json-server` or install it local `yarn add json-server -D`
+- To turn things easier, create a script to run json-server
+  - `json: "json-server -p 3333 -w"`
+
+---
+## Axios
+- Install running `yarn add axios`
