@@ -261,3 +261,49 @@ export default connect(state => ({
   cartSize: state.cart.length,
 }))(Header);
 ```
+
+## Reactotron
+
+- Install the integration `yarn add reactotron-react-js reactotron-redux`
+- Create a folder and file `src/config/ReactotronConfig.js`
+
+```js
+import Reactotron from 'reactotron-react-js';
+import { reactotronRedux } from 'reactotron-redux';
+
+if (process.env.NODE_ENV === 'development') {
+  const tron = Reactotron.configure()
+    .use(reactotronRedux())
+    .connect();
+
+  tron.clear();
+
+  console.tron = tron;
+}
+```
+- This will allow us to use `console.tron.log()`
+- The Eslint will complain about that, just put the rule exception `'no-console': ['error', {allow: ['tron']}]`
+- At `src/store/modules/index.js` we are going to create:
+
+```js
+import { createStore } from 'redux';
+
+import rootReducer from './modules/rootReducer';
+
+const enhancer =
+  process.env.NODE_ENV === 'development' ? console.tron.createEnhancer() : null;
+
+const store = createStore(rootReducer, enhancer);
+
+export default store;
+```
+
+- The `enhancer` is the next parameter of `createStore()`
+- After that, import the ReactotronConfig at the **App.js**
+  - `import './config/ReactotronConfig'`
+    - It must be imported before the `store` importation.
+- Reactotron allow us to monitor the `actions` and more than that, we can use the
+**State** functionality to:
+  - Create subscriptions and turn things a lot easier
+    - Exemple: `cart` will subscribe the Cart reducer
+  - Take snapshots from the current state.
