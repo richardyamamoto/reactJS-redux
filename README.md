@@ -130,7 +130,7 @@ It help us to consume API
 - Install running `yarn add axios`
 
 ---
-## Format numbers
+## Format currency
 
 To format currency we use a native lib called `Intl`. First create a folder/file in `src/util/index.js`. Exemple:
 
@@ -141,3 +141,65 @@ export const { format: formatPrice } = new Intl.NumberFormat('pt-BR', {
 });
 ```
 to use it, import the renamed function `import {formatPrice} from '../../util''` an use as a function `formatPrice()`
+
+---
+## Redux
+- To start we install redux and react-redux `yarn add redux react-redux`,
+After installation, create a folder/file inside src `src/store/index.js`. The initial configuration of Redux is going to happen inside this file.
+
+- Import a function called `createStore`:
+`import { createStore } from 'redux'` and put it into a constant named store.
+
+```js
+import { createStore } from 'redux';
+
+const store = createStore();
+
+export default store;
+```
+- on App.js
+
+```js
+import { Provider } from 'react-redux';
+import store from './store'
+```
+
+- The component Provider goes outside all the other components and inside it there is a parameter called store that goes store.
+
+```js
+
+function App() {
+  return (
+    <Provider store={store}>
+      <BrowserRouter>
+        <Header />
+        <Routes />
+        <GlobalStyle />
+      </BrowserRouter>
+    </Provider>
+  );
+}
+```
+- It will occur an error due to lack of the function of the reducer, to solve this problem and organize better our application.
+- Inside `src/store` create a folder called `modules` and inside modules a folder `cart` and a file named `reducer.js`
+  - `src/store/module/cart/reducer.js`
+- In `reducer.js` create a function as the following example
+- The function must return the state.
+
+```js
+export default function cart(){
+  return [];
+}
+```
+- Inside `src/modules` create `rootReducer.js` to manage all the reducer modules, using the `combineReducers` from redux, here is an exemple
+
+```js
+import { combineReducers } from 'redux';
+
+import cart from './cart/reducer';
+
+export default combineReducers({
+  cart,
+});
+```
+
