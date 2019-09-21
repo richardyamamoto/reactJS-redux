@@ -304,11 +304,36 @@ export default store;
     - It must be imported before the `store` importation.
 - Reactotron allow us to monitor the `actions` and more than that, we can use the
 **State** functionality to:
-<<<<<<< HEAD
   - Create subscriptions and turn things a lot easier.
     - Exemple: `cart` will subscribe the Cart reducer.
-=======
-  - Create subscriptions and turn things a lot easier
-    - Exemple: `cart` will subscribe the Cart reducer
->>>>>>> 1e2e3fbbc58e49dc304722cb4e720ca38d4759ec
   - Take snapshots from the current state.
+
+---
+## Add Product on the Cart List
+
+- First on `src/pages/cart/index.js` import the connect
+  - `import { connect } from 'react-redux'`
+  - Cut the `export default` and paste at the end of the file
+    - `export default connect()(Cart)`
+- Before the connect exportation, there is a function called `mapStateToProps()`
+  - This function is going to receive our state information and map it on a propertie shape.
+```js
+const mapStateToProps = state => ({
+  cart: state.cart,
+});
+```
+- The function `Cart` will receive the cart state by unstructured parameter
+  - `function Cart({ cart }) {...}`
+  - The cart will reach us in array format, so we can map it.
+- Then cut the entire `tr` tag and put into a `.map`
+
+```js
+{cart.map(product => (
+  <tr>
+  ...
+  </tr>
+))}
+```
+- Each product will return the informations.
+
+
