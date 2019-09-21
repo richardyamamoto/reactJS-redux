@@ -50,7 +50,7 @@ export default function Routes() {
   );
 }
 ```
-- The Route to Home page **must** have the `exact` propertie
+- The Route to Home page **must** have the `exact` property
 
 **App.js**
 
@@ -240,7 +240,7 @@ export default connect()(Home)
 ```js
 onClick={() => this.handleAddProduct(product)}
 ```
-- All component that we connect with Redux receive a propertie called `dispatch`. It throw an `action` to Redux and all the reducers going to listen this dispatch.
+- All component that we connect with Redux receive a property called `dispatch`. It throw an `action` to Redux and all the reducers going to listen this dispatch.
 - This is how the function that handle the `dispatch()` looks like:
 
 ```js
@@ -339,7 +339,7 @@ export default store;
   - Cut the `export default` and paste at the end of the file
     - `export default connect()(Cart)`
 - Before the connect exportation, there is a function called `mapStateToProps()`
-  - This function is going to receive our state information and map it on a propertie shape.
+  - This function is going to receive our state information and map it on a property shape.
 ```js
 const mapStateToProps = state => ({
   cart: state.cart,
@@ -395,7 +395,7 @@ return produce(state, draft => {
 ## Remove product from cart
 
 - On `src/pages/cart/index.js`.
-- To remove the product from cart, we have to use the `dispatch` propertie from Redux.
+- To remove the product from cart, we have to use the `dispatch` property from Redux.
 - On the Delete button we are going to trigger the action.
   - `<MdDelete onClick={() => dispatch({ type: 'REMOVE_FROM_CART', id: product.id })}>`
 - The action must have a `type` as obligatory attribute and we are going to pass the product id directly from the action
@@ -410,4 +410,79 @@ case 'REMOVE_FROM_CART':
           draft.splice(productIndex, 1);
         }
       });
+```
+
+---
+## Refactoring Actions
+
+Actions are vinculated with their modules, a smart way to organize it is creating a file inside the module with all the actions.
+
+- On `src/store/modules/cart` create `actions.js`.
+- Inside `actions.js` export functions that were used on Home and Cart page.
+
+```js
+export function addToCart(product) {
+  return {
+    type: '@cart/ADD',
+    product,
+  };
+}
+
+export function removeFromCart(id) {
+  return {
+    type: '@cart/REMOVE',
+    id,
+  };
+}
+```
+
+- We changed the type to a better identification on Reactotron.
+- After that import this action on Home and Cart page.
+  - `import * as CartActions from '../../store/modules/cart/actions'`.
+    -  Using the `*` we can import all the functions at once.
+- To make the application less verbal, we can use a function called `mapDispatchToProps`
+  - It makes `dispatch` a property, so we can use it directly as a parameter of the function Component or unstructure it to use on the Stateful components.
+- The `mapDispatchToProps` use a function from Redux called `bindActionCreator` that must be imported.
+  - `import { bindActionCreator } from 'redux'`.
+- This function waits for the Actions imported as a first parameter.
+
+```js
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(CartActions, dispatch);
+```
+
+- On `connect` we put the `mapDispatchToProps` as a second parameter.
+  - Obs.: If there is no `mapStateToProps`, the first parameter must be `null`.
+
+```js
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Cart);
+```
+
+- Do this steps on the Home and Cart page
+
+- The Stateless component should looks like
+
+```js
+function Cart({ cart, removeFromCart }) {
+  ...
+  <button type="button">
+    <MdDelete
+      size={20}
+      color="#7159c1"
+      onClick={() => removeFromCart(product.id)}
+    />
+  </button>
+  ...
+}
+```
+- The Stateful component methods should looks like
+
+```js
+handleAddProduct = product => {
+  const { addToCart } = this.props;
+  addToCart(product);
+};
 ```
