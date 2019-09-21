@@ -390,3 +390,24 @@ return produce(state, draft => {
 - If productIndex is bigger or equals 0, it means that the product already exists in the list.
 - So we catch the product position in the array and pick the `amount` attribute and sum 1.
 - Else we use rest operator to push all the new product infomation plus the default amount that is 1 and it will change the `cartSize`.
+
+---
+## Remove product from cart
+
+- On `src/pages/cart/index.js`.
+- To remove the product from cart, we have to use the `dispatch` propertie from Redux.
+- On the Delete button we are going to trigger the action.
+  - `<MdDelete onClick={() => dispatch({ type: 'REMOVE_FROM_CART', id: product.id })}>`
+- The action must have a `type` as obligatory attribute and we are going to pass the product id directly from the action
+- Now on the `src/store/modules/cart/reducer.js`
+- We create a new case and treat the exclusion
+
+```js
+case 'REMOVE_FROM_CART':
+      return produce(state, draft => {
+        const productIndex = draft.findIndex(p => p.id === action.id);
+        if (productIndex >= 0) {
+          draft.splice(productIndex, 1);
+        }
+      });
+```
