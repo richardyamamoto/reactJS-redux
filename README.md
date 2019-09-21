@@ -25,11 +25,11 @@ This application has the objective to be a consult material in the future. We ar
 ### Create Pages - Part I
 
 - Inside src create a folder named pages
-  - src/pages
-- Inside pages each page has a folder with it's self index.js
-  - src/pages/Home/index.js
-  - src/pages/Cart/index.js
-- Create a Stateless component inside of each index.js
+  - `src/pages`
+- Inside `pages` each page has a folder with itself `index.js`
+  - `src/pages/Home/index.js`
+  - `src/pages/Cart/index.js`
+- Create a Stateless component inside of each `index.js`
 
 ## Continuing Routes
 **routes.js**
@@ -72,9 +72,11 @@ function App() {
 ---
 ## Global Styles
 
+[Documentation](https://www.styled-components.com/docs)
+
 - Install the `styled-components` running `yarn add styled-components`
-- Inside src create a folder named `styles` with a file named `global.js`
-  - src/styles/global.js
+- Inside `src`create a folder named `styles` with a file named `global.js`
+  - `src/styles/global.js`
 - Import createGlobalStyle
   - `import { createGlobalStyle } from 'styled-components'`
   - `export default createGlobalStyle``;`
@@ -84,11 +86,13 @@ function App() {
 ---
 ## Components - Header
 
+The components can be reused by all the other pages.
+
 - Create a folder named `components` inside `src`
-  - src/components
-- Inside `components` each component need to have a folder with index.js and styles.js
-  - src/components/header/index.js
-  - src/components/header/styles.js
+  - `src/components`
+- Inside `components` each component need to have a folder with `index.js` and `styles.js`
+  - `src/components/header/index.js`
+  - `src/components/header/styles.js`
 
 **index.js**
 
@@ -108,29 +112,43 @@ function App() {
 ---
 ### Icons
 
+[Documentation](https://react-icons.netlify.com/#/)
+
 - Install react-icons `yarn add react-icons`
   - `import { MdShoppingBasket } from 'react-icons/md';`
 
 
 ## Polished
-- Librarie that handles colors
+
+[Documentation](https://polished.js.org/docs/)
+
+Librarie that handles colors.
+
 - `yarn add polished`
   - `import { darken } from 'polished`
     - put this way on CSS `${darken(0.03, "#7159c1")}`
 
 ---
 ## Json Server
+
+[Documentation](https://github.com/typicode/json-server)
+
 - Install running `yarn global add json-server` or install it local `yarn add json-server -D`
 - To turn things easier, create a script to run json-server
   - `json: "json-server -p 3333 -w"`
 
 ---
 ## Axios
+
+[Documentation](https://github.com/axios/axios)
+
 It help us to consume API
 - Install running `yarn add axios`
 
 ---
 ## Format currency
+
+[Documentation](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat)
 
 To format currency we use a native lib called `Intl`. First create a folder/file in `src/util/index.js`. Exemple:
 
@@ -144,6 +162,9 @@ to use it, import the renamed function `import {formatPrice} from '../../util''`
 
 ---
 ## Redux
+
+[Documentation](https://redux.js.org/basics/basic-tutorial)
+
 - To start we install redux and react-redux `yarn add redux react-redux`,
 After installation, create a folder/file inside src `src/store/index.js`. The initial configuration of Redux is going to happen inside this file.
 
@@ -264,6 +285,8 @@ export default connect(state => ({
 
 ## Reactotron
 
+[Documentatio](https://github.com/infinitered/reactotron)
+
 - Install the integration `yarn add reactotron-react-js reactotron-redux`
 - Create a folder and file `src/config/ReactotronConfig.js`
 
@@ -336,4 +359,34 @@ const mapStateToProps = state => ({
 ```
 - Each product will return the informations.
 
+## Immer to treat duplicated products
 
+[Documentation](https://immerjs.github.io/immer/docs/introduction)
+
+The basic idea is that you will apply all your changes to a temporary draftState, which is a proxy of the currentState.
+
+- To install run `yarn add immer`
+- First on `src/store/modules/cart/reducer.js` import the `produce`
+  - `import produce from 'immer'`
+
+- Now on the return of the Switch case, instead of using the rest operator like we did before, the immer allow us to "mutate" the state.
+- In the return goes the `produce()` and the first parameter is the current `state` and the second one is the `draft` that will suffer the changes.
+- Create a const `productIndex` and it will receive the draft (a copy of the state)
+- Search for the product by index using `.findIndex(p =>())`
+
+```js
+return produce(state, draft => {
+        const productIndex = draft.findIndex(p => p.id === action.product.id);
+        if (productIndex >= 0) {
+          draft[productIndex].amount += 1;
+        } else {
+          draft.push({
+            ...action.product,
+            amount: 1,
+          });
+        }
+      });
+```
+- If productIndex is bigger or equals 0, it means that the product already exists in the list.
+- So we catch the product position in the array and pick the `amount` attribute and sum 1.
+- Else we use rest operator to push all the new product infomation plus the default amount that is 1 and it will change the `cartSize`.
