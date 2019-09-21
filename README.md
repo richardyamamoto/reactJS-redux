@@ -392,7 +392,7 @@ return produce(state, draft => {
 - Else we use rest operator to push all the new product infomation plus the default amount that is 1 and it will change the `cartSize`.
 
 ---
-## Remove product from cart
+## Remove Product from Cart
 
 - On `src/pages/cart/index.js`.
 - To remove the product from cart, we have to use the `dispatch` property from Redux.
@@ -485,4 +485,59 @@ handleAddProduct = product => {
   const { addToCart } = this.props;
   addToCart(product);
 };
+```
+
+---
+## Changing Product amount
+
+- On `src/store/modules/cart/actions.js`
+- Create the update action
+
+```js
+export function updateAmount(id, amount) {
+  return {
+    type: '@cart/UPDATE_AMOUNT',
+    id,
+    amount,
+  };
+}
+```
+- Then on `src/pages/Cart/index.js`
+- Create two functions, `increment()` and `decrement()`
+- The `increment` must receive as parameter the product
+  - Then we call the `updateAmount(product.id, product.amount + 1)`
+- The `decrement` is the oposite.
+
+```js
+function increment(product) {
+    updateAmount(product.id, product.amount + 1);
+}
+```
+- To trigger the function put it on the button
+
+```js
+<button type="button">
+  <MdAddCircleOutline
+    size={20}
+    color="#7159c1"
+    onClick={() => increment(product)}
+  />
+</button>
+```
+
+- The action does not have the obligation to validate the update.
+- Now on `src/store/modules/cart/reducer.js`
+
+```js
+case '@cart/UPDATE_AMOUNT': {
+      if (action.amount <= 0) {
+        return state;
+      }
+      return produce(state, draft => {
+        const productIndex = draft.findIndex(p => p.id === action.id);
+        if (productIndex >= 0) {
+          draft[productIndex].amount = Number(action.amount);
+        }
+      });
+    }
 ```
