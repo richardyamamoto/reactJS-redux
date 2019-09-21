@@ -488,7 +488,7 @@ handleAddProduct = product => {
 ```
 
 ---
-## Changing Product amount
+## Changing Product Amount
 
 - On `src/store/modules/cart/actions.js`
 - Create the update action
@@ -541,3 +541,30 @@ case '@cart/UPDATE_AMOUNT': {
       });
     }
 ```
+
+---
+## Calculating Subtotal and Total
+
+There is a lot of ways to make it do, but to save resources we are going to calculate on `mapStateToProps`
+
+- On `src/pages/cart/index.js`
+
+```js
+const mapStateToProps = state => ({
+  cart: state.cart.map(product => ({
+    ...product,
+    subtotal: formatPrice(product.price * product.amount),
+  })),
+  total: formatPrice(
+    state.cart.reduce((total, product) => {
+      return total + product.price * product.amount;
+    }, 0)
+  ),
+});
+```
+- The cart reducer is an array so we can map it.
+- Copy all the product information and add the subtotal attribute.
+- Use the `formatPrice()` (we used before to fromat currency).
+- The total is a new virtual state
+  - We are using the `reduce()` that is a native function of JavaScript. The first parameter is a function that will agroup the values and the second is the start value.
+- The `total` must be placed on the function component parameter as a new property.
