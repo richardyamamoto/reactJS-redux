@@ -568,3 +568,21 @@ const mapStateToProps = state => ({
 - The total is a new virtual state
   - We are using the `reduce()` that is a native function of JavaScript. The first parameter is a function that will agroup the values and the second is the start value.
 - The `total` must be placed on the function component parameter as a new property.
+
+---
+## Showing Quantities
+
+The page home there is a div inside each button that display the amount of each item that was included in the cart. So to turn this counter dynamic
+
+- Using the `mapStateToProps()` at `src/pages/home/index.js`
+
+```js
+const mapStateToProps = state => ({
+  amount: state.cart.reduce((amount, product) => {
+    amount[product.id] = product.amount;
+
+    return amount;
+  }, {}),
+});
+```
+- We are going to use the product id as a index for amount than it will receive the product amount.
