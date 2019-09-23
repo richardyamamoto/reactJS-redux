@@ -585,7 +585,11 @@ const mapStateToProps = state => ({
   }, {}),
 });
 ```
+<<<<<<< HEAD
 - Create a object propertie called `amount` and we are going to `reduce` the cart state to a single value (the amount).
 - The method `reduce()` waits for the first parameter a variable to alocate the value and a second one that is the object to go through.
 - `amount[product.id]` is a easy way to find the product by the primaryKey.
 - the array indexed by the `id` will receive the amout of the product
+=======
+- We are going to use the product id as a index for amount than it will receive the product amount.
+>>>>>>> ce691d03e58acb71c28290745acf50517db88838
