@@ -585,11 +585,131 @@ const mapStateToProps = state => ({
   }, {}),
 });
 ```
-<<<<<<< HEAD
 - Create a object propertie called `amount` and we are going to `reduce` the cart state to a single value (the amount).
 - The method `reduce()` waits for the first parameter a variable to alocate the value and a second one that is the object to go through.
 - `amount[product.id]` is a easy way to find the product by the primaryKey.
 - the array indexed by the `id` will receive the amout of the product
-=======
-- We are going to use the product id as a index for amount than it will receive the product amount.
->>>>>>> ce691d03e58acb71c28290745acf50517db88838
+
+---
+## Redux Saga
+
+[Documentation](https://github.com/redux-saga/redux-saga)
+
+The Redux Saga, allow us to intercept the Actions and make asyncronus requests causing side effects.
+- Install using `yarn add redux-saga`
+- create at `sagas.js` inside `src/store/modules/cart`
+  - `src/store/modules/cart/sagas.js`
+- Create a `function* addToCart(action)`. This function instead of receive the whole product, it will only wait for the id of the product, but first we have to change the `src/pages/home/index.js` the `handleAddProduct()` and put the id instead of the whole product.
+  - `function*` the asterisk means that it is a `generator`, think that is analog to a `async/await` function.
+- After that the `sagas.js` should looks like:
+
+```js
+function* addToCart({ id }) {}
+```
+- Then import the api at services.
+  -`import api from '../../../services/api'`
+- But the redux-saga does not allow us to use the `api.get()` as usually. We have to import the method `call` to consume asyncronous functions.
+  - `import { call } from 'redux-saga/effects'`
+- The method `call()` waits for the firs parameter, the function that we want to use then separeted by comma the other parameters of the function.
+- It should looks like this:
+
+```js
+import { call } from 'redux-saga/effects';
+import api from '../../../services/api';
+
+function* addToCart({ id }) {
+  const response = yield call(api.get, `/products/${id}`);
+}
+```
+
+- `yield` is a reserved word analog to `await`.
+- After that we have to change our reducer, because they are triggered by our action `'@cart/ADD`. So inside `src/store/modules/actions.js` make the following changes:
+
+```js
+export function addToCartRequest(id) {
+  return {
+    type: '@cart/ADD_REQUEST',
+    id,
+  };
+}
+
+export function addToCartSuccess(product) {
+  return {
+    type: '@cart/ADD_SUCCESS',
+    product,
+  };
+}
+```
+- At `src/pages/home/index.js` we have make some changes too `handleAddProduct()`
+
+```js
+handleAddProduct = id => {
+    const { addToCartRequest } = this.props;
+    addToCartRequest(id);
+};
+```
+- To dispatch an Action from redux-saga we use the method `put`
+- To wait for all changes we use the method `all`
+- Then to put listeners we use the `takeLatest` (it is better used if the user click more than once. The redux-saga abort the first request and just conclude the latest one)
+  - `import { call, put, all, takeLatest } from 'redux-saga/effects'`
+
+- The first parameter of `takeLatest()` is which action we want to listen and the second is which function we are going to dispatch.
+- It should looks like this:
+
+```js
+import { call, put, all, takeLatest } from 'redux-saga/effects';
+import api from '../../../services/api';
+
+import { addToCartSuccess } from './actions';
+
+function* addToCart({ id }) {
+  const response = yield call(api.get, `/products/${id}`);
+
+  yield put(addToCartSuccess(response.data));
+}
+
+export default all([takeLatest('@cart/ADD_REQUEST', addToCart)]);
+```
+- We are going to unificate the sagas as we did with Reducers
+- At `src/store/modules/` create `rootSaga.js`
+- Inside `rootSaga.js` import the method `all` from `redux-saga/effects`
+- Then create a generator function called `rootSaga()` that returns a list of all the sagas
+
+```js
+import { all } from 'redux-saga/effects';
+
+import cart from './cart/sagas';
+
+export default function* rootSaga() {
+  return yield all([cart]);
+}
+```
+
+- Now on `src/store/index.js`
+
+```js
+import { createStore, applyMiddleware, compose } from 'redux';
+import createSagaMiddleware from 'redux-saga';
+
+import rootReducer from './modules/rootReducer';
+import rootSaga from './modules/rootSaga';
+
+const sagaMiddleware = createSagaMiddleware();
+
+const enhancer =
+  process.env.NODE_ENV === 'development'
+    ? compose(
+        console.tron.createEnhancer(),
+        applyMiddleware(sagaMiddleware)
+      )
+    : applyMiddleware(sagaMiddleware);
+
+const store = createStore(rootReducer, enhancer);
+sagaMiddleware.run(rootSaga);
+
+export default store;
+```
+- The `applyMiddleware` let us add the middleware to our reducers and intercept the actions.
+- The `compose` from Redux let us merge the configurations.
+
+---
