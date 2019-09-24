@@ -713,3 +713,42 @@ export default store;
 - The `compose` from Redux let us merge the configurations.
 
 ---
+
+## Reactotron + Saga
+
+[Documentation](https://github.com/infinitered/reactotron/blob/master/docs/plugin-redux-saga.md)
+
+- To install run `yarn add reactotron-redux-saga`
+- First at `src/config/ReactotronConfig.js`
+  - `import reactotronSaga from 'reactotron-redux-saga'`
+- Below the `.use(reactotronRedux())` put the `.use(reactotronSaga())`
+
+```js
+import Reactotron from 'reactotron-react-js';
+import { reactotronRedux } from 'reactotron-redux';
+import reactotronSaga from 'reactotron-redux-saga';
+
+if (process.env.NODE_ENV === 'development') {
+  const tron = Reactotron.configure()
+    .use(reactotronRedux())
+    .use(reactotronSaga())
+    .connect();
+
+  tron.clear();
+
+  console.tron = tron;
+}
+```
+
+- Now on `src/store/index.js` this are the changes
+
+```js
+const sagaMonitor =
+  process.env.NODE_ENV === 'development'
+    ? console.tron.createSagaMonitor()
+    : null;
+
+const sagaMiddleware = createSagaMiddleware({
+  sagaMonitor,
+});
+```
