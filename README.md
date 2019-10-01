@@ -285,7 +285,7 @@ export default connect(state => ({
 
 ## Reactotron
 
-[Documentatio](https://github.com/infinitered/reactotron)
+[Documentation](https://github.com/infinitered/reactotron)
 
 - Install the integration `yarn add reactotron-react-js reactotron-redux`
 - Create a folder and file `src/config/ReactotronConfig.js`
@@ -851,3 +851,17 @@ function* addToCart({ id }) {
   }
 }
 ```
+## Toastify
+
+[Documentation][https://github.com/fkhadra/react-toastify]
+
+React-Toastify allow you to add notification to your app with ease.
+- Install using `yarn add react-toastify`
+- At **App.js** import
+  - `import { ToastContainer } from 'react-toastify'`
+- Then put the component inside the return
+  - The component has the propertie `autoClose` that waits for the time to close
+- At **global.js** (global style) import the visual of the toast
+  - `import 'react-toastify/dist/ReactToastify.css'`
+- Then on saga import
+  - `import { toast } from 'react-toastify'`
