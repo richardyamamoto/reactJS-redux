@@ -865,3 +865,4 @@ React-Toastify allow you to add notification to your app with ease.
   - `import 'react-toastify/dist/ReactToastify.css'`
 - Then on saga import
   - `import { toast } from 'react-toastify'`
+- Now we are able to use the `toast.error('Your message')` to show the client the error message.
