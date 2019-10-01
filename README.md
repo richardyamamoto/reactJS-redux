@@ -752,3 +752,64 @@ const sagaMiddleware = createSagaMiddleware({
   sagaMonitor,
 });
 ```
+
+## Separating Actions
+
+- First we are going to controll the product amount at sagas.
+- Inside `src/store/module/cart/reducer.js`
+- At `case '@cart/ADD_SUCCESS':` delete the treatment of product, it should looks like this:
+
+```js
+case '@cart/ADD_SUCCESS':
+  return produce(state, draft => {
+    const { product } = action;
+    draft.push(product);
+  });
+```
+- Then in `src/store/modules/cart/sagas.js`
+
+- create a `const data = {}` that will receive the response of api, and create a attribute amount for product object and the price formatted
+
+```js
+const data = {
+    ...response.data,
+    amount: 1,
+    priceFormatted: formatPrice(response.data.price),
+  };
+```
+
+- After that we want to verify if the product already exists in the cart.
+- To access the cart state we are going to import the methos `select` from `redux-saga/effects`
+  - `import { select } from 'redux-saga/effects'`
+- The method `select()` receive as parameter the state from reducers
+
+```js
+import { call, select, put, all, takeLatest } from 'redux-saga/effects';
+import api from '../../../services/api';
+import { formatPrice } from '../../../util';
+
+import { addToCartSuccess, updateAmount } from './actions';
+
+function* addToCart({ id }) {
+  const productExists = yield select(state => {
+    return state.cart.find(product => product.id === id);
+  });
+
+  if (productExists) {
+    const amount = productExists.amount + 1;
+
+    yield put(updateAmount(id, amount));
+  } else {
+    const response = yield call(api.get, `/products/${id}`);
+    const data = {
+      ...response.data,
+      amount: 1,
+      priceFormatted: formatPrice(response.data.price),
+    };
+
+    yield put(addToCartSuccess(data));
+  }
+}
+export default all([takeLatest('@cart/ADD_REQUEST', addToCart)]);
+```
+- The file should looks like above
