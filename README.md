@@ -32,13 +32,14 @@ This application has the objective to be a consult material in the future. We ar
 - Create a Stateless component inside of each `index.js`
 
 ## Continuing Routes
+
 **routes.js**
 
 - Import the pages inside `routes.js`
-    - `import Home from './pages/Home'`
-    - `import Cart from './pages/Cart'`
+  - `import Home from './pages/Home'`
+  - `import Cart from './pages/Cart'`
 - The function `Routes(){}` will return the `Switch` component outside the block
-and the `Routes` component inside
+  and the `Routes` component inside
 
 ```js
 export default function Routes() {
@@ -50,6 +51,7 @@ export default function Routes() {
   );
 }
 ```
+
 - The Route to Home page **must** have the `exact` property
 
 **App.js**
@@ -58,7 +60,8 @@ export default function Routes() {
   - `import { BrowserRouter } from 'react-router-dom'`
   - `import Routes from './routes'`
 - The function `App(){}` will return the `BrowserRouter` component with `Routes`
-component inside
+  component inside
+
 ```js
 function App() {
   return (
@@ -70,6 +73,7 @@ function App() {
 ```
 
 ---
+
 ## Global Styles
 
 [Documentation](https://www.styled-components.com/docs)
@@ -79,11 +83,12 @@ function App() {
   - `src/styles/global.js`
 - Import createGlobalStyle
   - `import { createGlobalStyle } from 'styled-components'`
-  - `export default createGlobalStyle``;`
+  - ` export default createGlobalStyle``; `
 
 [global.js](https://gist.github.com/richardyamamoto/bb2b8df5b71507bb26e7f62a862cdb70)
 
 ---
+
 ## Components - Header
 
 The components can be reused by all the other pages.
@@ -110,13 +115,13 @@ The components can be reused by all the other pages.
 [Header - index.js](https://gist.github.com/richardyamamoto/d9129142072c0d788ce44a1f57012d49)
 
 ---
+
 ### Icons
 
 [Documentation](https://react-icons.netlify.com/#/)
 
 - Install react-icons `yarn add react-icons`
   - `import { MdShoppingBasket } from 'react-icons/md';`
-
 
 ## Polished
 
@@ -129,6 +134,7 @@ Librarie that handles colors.
     - put this way on CSS `${darken(0.03, "#7159c1")}`
 
 ---
+
 ## Json Server
 
 [Documentation](https://github.com/typicode/json-server)
@@ -138,14 +144,17 @@ Librarie that handles colors.
   - `json: "json-server -p 3333 -w"`
 
 ---
+
 ## Axios
 
 [Documentation](https://github.com/axios/axios)
 
 It help us to consume API
+
 - Install running `yarn add axios`
 
 ---
+
 ## Format currency
 
 [Documentation](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat)
@@ -158,18 +167,20 @@ export const { format: formatPrice } = new Intl.NumberFormat('pt-BR', {
   currency: 'BRL',
 });
 ```
+
 to use it, import the renamed function `import {formatPrice} from '../../util''` an use as a function `formatPrice()`
 
 ---
+
 ## Redux
 
 [Documentation](https://redux.js.org/basics/basic-tutorial)
 
 - To start we install redux and react-redux `yarn add redux react-redux`,
-After installation, create a folder/file inside src `src/store/index.js`. The initial configuration of Redux is going to happen inside this file.
+  After installation, create a folder/file inside src `src/store/index.js`. The initial configuration of Redux is going to happen inside this file.
 
 - Import a function called `createStore`:
-`import { createStore } from 'redux'` and put it into a constant named store.
+  `import { createStore } from 'redux'` and put it into a constant named store.
 
 ```js
 import { createStore } from 'redux';
@@ -178,17 +189,17 @@ const store = createStore();
 
 export default store;
 ```
+
 - on App.js
 
 ```js
 import { Provider } from 'react-redux';
-import store from './store'
+import store from './store';
 ```
 
 - The component Provider goes outside all the other components and inside it there is a parameter called store that goes store.
 
 ```js
-
 function App() {
   return (
     <Provider store={store}>
@@ -201,6 +212,7 @@ function App() {
   );
 }
 ```
+
 - It will occur an error due to lack of the function of the reducer, to solve this problem and organize better our application.
 - Inside `src/store` create a folder called `modules` and inside modules a folder `cart` and a file named `reducer.js`
   - `src/store/module/cart/reducer.js`
@@ -208,10 +220,11 @@ function App() {
 - The function must return the state.
 
 ```js
-export default function cart(){
+export default function cart() {
   return [];
 }
 ```
+
 - Inside `src/modules` create `rootReducer.js` to manage all the reducer modules, using the `combineReducers` from redux, here is an exemple
 
 ```js
@@ -223,16 +236,20 @@ export default combineReducers({
   cart,
 });
 ```
+
 ---
+
 ## Add Products to Cart
 
 - Inside `page/Home/index.js`
 - `import { connect } from 'react-redux';`
- -  The connect returns another function and we call it by passing the name of the component.
+- The connect returns another function and we call it by passing the name of the component.
 - At `src/pages/Home/index.js`, cut the `export default` and put on the end of the file, but the export going to be like this:
+
 ```js
-export default connect()(Home)
+export default connect()(Home);
 ```
+
 - Always that we want to modify something at state, we are going to throw an `Action`.
   - Action is an object with type and the content we want.
 - On this exemple the action going to be called when clicked on the button of the product and the function will receive the product as parameter.
@@ -240,19 +257,21 @@ export default connect()(Home)
 ```js
 onClick={() => this.handleAddProduct(product)}
 ```
+
 - All component that we connect with Redux receive a property called `dispatch`. It throw an `action` to Redux and all the reducers going to listen this dispatch.
 - This is how the function that handle the `dispatch()` looks like:
 
 ```js
 handleAddProduct = product => {
-    const { dispatch } = this.props;
+  const { dispatch } = this.props;
 
-    dispatch({
-      type: 'ADD_TO_CART',
-      product,
-    });
-  };
+  dispatch({
+    type: 'ADD_TO_CART',
+    product,
+  });
+};
 ```
+
 - The action dispatched has an object shape, and the attribute **type** is obligatory.
 - On `src/store/modules/cart/reducer.js`
 - This redeucer and all the others (if their exists) are going to receive the dispatch, and to treat this situation we use Switch Case conditional flux controller.
@@ -267,8 +286,8 @@ export default function cart(state = [], action) {
       return state;
   }
 }
-
 ```
+
 - The parameter state is the previous `state` and the `action` contents all the action dispatched.
 - Because of the way Redux works and all the reducers listen to the actions, the switch case `default` returns the previus state in case of the action do not match with any case.
 - To make another component recover the action dispatched, import the `connect`
@@ -304,6 +323,7 @@ if (process.env.NODE_ENV === 'development') {
   console.tron = tron;
 }
 ```
+
 - This will allow us to use `console.tron.log()`
 - The Eslint will complain about that, just put the rule exception `'no-console': ['error', {allow: ['tron']}]`
 - At `src/store/modules/index.js` we are going to create:
@@ -326,12 +346,13 @@ export default store;
   - `import './config/ReactotronConfig'`
     - It must be imported before the `store` importation.
 - Reactotron allow us to monitor the `actions` and more than that, we can use the
-**State** functionality to:
+  **State** functionality to:
   - Create subscriptions and turn things a lot easier.
     - Exemple: `cart` will subscribe the Cart reducer.
   - Take snapshots from the current state.
 
 ---
+
 ## Add Product on the Cart List
 
 - First on `src/pages/cart/index.js` import the connect
@@ -340,23 +361,24 @@ export default store;
     - `export default connect()(Cart)`
 - Before the connect exportation, there is a function called `mapStateToProps()`
   - This function is going to receive our state information and map it on a property shape.
+
 ```js
 const mapStateToProps = state => ({
   cart: state.cart,
 });
 ```
+
 - The function `Cart` will receive the cart state by unstructured parameter
   - `function Cart({ cart }) {...}`
   - The cart will reach us in array format, so we can map it.
 - Then cut the entire `tr` tag and put into a `.map`
 
 ```js
-{cart.map(product => (
-  <tr>
-  ...
-  </tr>
-))}
+{
+  cart.map(product => <tr>...</tr>);
+}
 ```
+
 - Each product will return the informations.
 
 ## Immer to treat duplicated products
@@ -367,6 +389,7 @@ The basic idea is that you will apply all your changes to a temporary draftState
 
 - To install run `yarn add immer`
 - First on `src/store/modules/cart/reducer.js` import the `produce`
+
   - `import produce from 'immer'`
 
 - Now on the return of the Switch case, instead of using the rest operator like we did before, the immer allow us to "mutate" the state.
@@ -376,22 +399,24 @@ The basic idea is that you will apply all your changes to a temporary draftState
 
 ```js
 return produce(state, draft => {
-        const productIndex = draft.findIndex(p => p.id === action.product.id);
-        if (productIndex >= 0) {
-          draft[productIndex].amount += 1;
-        } else {
-          draft.push({
-            ...action.product,
-            amount: 1,
-          });
-        }
-      });
+  const productIndex = draft.findIndex(p => p.id === action.product.id);
+  if (productIndex >= 0) {
+    draft[productIndex].amount += 1;
+  } else {
+    draft.push({
+      ...action.product,
+      amount: 1,
+    });
+  }
+});
 ```
+
 - If productIndex is bigger or equals 0, it means that the product already exists in the list.
 - So we catch the product position in the array and pick the `amount` attribute and sum 1.
 - Else we use rest operator to push all the new product infomation plus the default amount that is 1 and it will change the `cartSize`.
 
 ---
+
 ## Remove Product from Cart
 
 - On `src/pages/cart/index.js`.
@@ -413,6 +438,7 @@ case 'REMOVE_FROM_CART':
 ```
 
 ---
+
 ## Refactoring Actions
 
 Actions are vinculated with their modules, a smart way to organize it is creating a file inside the module with all the actions.
@@ -439,7 +465,7 @@ export function removeFromCart(id) {
 - We changed the type to a better identification on Reactotron.
 - After that import this action on Home and Cart page.
   - `import * as CartActions from '../../store/modules/cart/actions'`.
-    -  Using the `*` we can import all the functions at once.
+    - Using the `*` we can import all the functions at once.
 - To make the application less verbal, we can use a function called `mapDispatchToProps`
   - It makes `dispatch` a property, so we can use it directly as a parameter of the function Component or unstructure it to use on the Stateful components.
 - The `mapDispatchToProps` use a function from Redux called `bindActionCreator` that must be imported.
@@ -478,6 +504,7 @@ function Cart({ cart, removeFromCart }) {
   ...
 }
 ```
+
 - The Stateful component methods should looks like
 
 ```js
@@ -488,6 +515,7 @@ handleAddProduct = product => {
 ```
 
 ---
+
 ## Changing Product Amount
 
 - On `src/store/modules/cart/actions.js`
@@ -502,6 +530,7 @@ export function updateAmount(id, amount) {
   };
 }
 ```
+
 - Then on `src/pages/Cart/index.js`
 - Create two functions, `increment()` and `decrement()`
 - The `increment` must receive as parameter the product
@@ -510,9 +539,10 @@ export function updateAmount(id, amount) {
 
 ```js
 function increment(product) {
-    updateAmount(product.id, product.amount + 1);
+  updateAmount(product.id, product.amount + 1);
 }
 ```
+
 - To trigger the function put it on the button
 
 ```js
@@ -543,6 +573,7 @@ case '@cart/UPDATE_AMOUNT': {
 ```
 
 ---
+
 ## Calculating Subtotal and Total
 
 There is a lot of ways to make it do, but to save resources we are going to calculate on `mapStateToProps`
@@ -562,6 +593,7 @@ const mapStateToProps = state => ({
   ),
 });
 ```
+
 - The cart reducer is an array so we can map it.
 - Copy all the product information and add the subtotal attribute.
 - Use the `formatPrice()` (we used before to fromat currency).
@@ -570,6 +602,7 @@ const mapStateToProps = state => ({
 - The `total` must be placed on the function component parameter as a new property.
 
 ---
+
 ## Showing Quantities
 
 The page home there is a div inside each button that display the amount of each item that was included in the cart. So to turn this counter dynamic
@@ -585,17 +618,20 @@ const mapStateToProps = state => ({
   }, {}),
 });
 ```
+
 - Create a object propertie called `amount` and we are going to `reduce` the cart state to a single value (the amount).
 - The method `reduce()` waits for the first parameter a variable to alocate the value and a second one that is the object to go through.
 - `amount[product.id]` is a easy way to find the product by the primaryKey.
 - the array indexed by the `id` will receive the amout of the product
 
 ---
+
 ## Redux Saga
 
 [Documentation](https://github.com/redux-saga/redux-saga)
 
 The Redux Saga, allow us to intercept the Actions and make asyncronus requests causing side effects.
+
 - Install using `yarn add redux-saga`
 - create at `sagas.js` inside `src/store/modules/cart`
   - `src/store/modules/cart/sagas.js`
@@ -606,8 +642,8 @@ The Redux Saga, allow us to intercept the Actions and make asyncronus requests c
 ```js
 function* addToCart({ id }) {}
 ```
-- Then import the api at services.
-  -`import api from '../../../services/api'`
+
+- Then import the api at services. -`import api from '../../../services/api'`
 - But the redux-saga does not allow us to use the `api.get()` as usually. We have to import the method `call` to consume asyncronous functions.
   - `import { call } from 'redux-saga/effects'`
 - The method `call()` waits for the firs parameter, the function that we want to use then separeted by comma the other parameters of the function.
@@ -640,17 +676,20 @@ export function addToCartSuccess(product) {
   };
 }
 ```
+
 - At `src/pages/home/index.js` we have make some changes too `handleAddProduct()`
 
 ```js
 handleAddProduct = id => {
-    const { addToCartRequest } = this.props;
-    addToCartRequest(id);
+  const { addToCartRequest } = this.props;
+  addToCartRequest(id);
 };
 ```
+
 - To dispatch an Action from redux-saga we use the method `put`
 - To wait for all changes we use the method `all`
 - Then to put listeners we use the `takeLatest` (it is better used if the user click more than once. The redux-saga abort the first request and just conclude the latest one)
+
   - `import { call, put, all, takeLatest } from 'redux-saga/effects'`
 
 - The first parameter of `takeLatest()` is which action we want to listen and the second is which function we are going to dispatch.
@@ -670,6 +709,7 @@ function* addToCart({ id }) {
 
 export default all([takeLatest('@cart/ADD_REQUEST', addToCart)]);
 ```
+
 - We are going to unificate the sagas as we did with Reducers
 - At `src/store/modules/` create `rootSaga.js`
 - Inside `rootSaga.js` import the method `all` from `redux-saga/effects`
@@ -709,6 +749,7 @@ sagaMiddleware.run(rootSaga);
 
 export default store;
 ```
+
 - The `applyMiddleware` let us add the middleware to our reducers and intercept the actions.
 - The `compose` from Redux let us merge the configurations.
 
@@ -766,16 +807,17 @@ case '@cart/ADD_SUCCESS':
     draft.push(product);
   });
 ```
+
 - Then in `src/store/modules/cart/sagas.js`
 
 - create a `const data = {}` that will receive the response of api, and create a attribute amount for product object and the price formatted
 
 ```js
 const data = {
-    ...response.data,
-    amount: 1,
-    priceFormatted: formatPrice(response.data.price),
-  };
+  ...response.data,
+  amount: 1,
+  priceFormatted: formatPrice(response.data.price),
+};
 ```
 
 - After that we want to verify if the product already exists in the cart.
@@ -812,7 +854,9 @@ function* addToCart({ id }) {
 }
 export default all([takeLatest('@cart/ADD_REQUEST', addToCart)]);
 ```
+
 - The file should looks like above
+
 ---
 
 ## Consult Stock on Add
@@ -821,6 +865,7 @@ To consult the stock, remember that in the JSON file there is an array of object
 
 - Create a const that will receive the api
 - Then verify if the amount of the existent product plus one won't overpass the stock amount.
+
 ```js
 function* addToCart({ id }) {
   const productExists = yield select(state => {
@@ -851,11 +896,13 @@ function* addToCart({ id }) {
   }
 }
 ```
+
 ## Toastify
 
 [Documentation][https://github.com/fkhadra/react-toastify]
 
 React-Toastify allow you to add notification to your app with ease.
+
 - Install using `yarn add react-toastify`
 - At **App.js** import
   - `import { ToastContainer } from 'react-toastify'`
@@ -866,3 +913,74 @@ React-Toastify allow you to add notification to your app with ease.
 - Then on saga import
   - `import { toast } from 'react-toastify'`
 - Now we are able to use the `toast.error('Your message')` to show the client the error message.
+
+## Stock on changing amount
+
+We are going to treat the product changing on the cart page.
+
+- First separate the actions.
+  - When using the Redux Saga, is a good practice to split the actions to have more control and organization.
+- Inside `src/store/modules/cart/actions.js`
+
+```js
+export function updateAmountRequest(id, amount) {
+  return {
+    type: '@cart/UPDATE_AMOUNT_REQUEST',
+    id,
+    amount,
+  };
+}
+export function updateAmountSuccess(id, amount) {
+  return {
+    type: '@cart/UPDATE_AMOUNT_SUCCESS',
+    id,
+    amount,
+  };
+}
+```
+
+- Always use the Request and Success.
+- On Page Cart `index.js` change the import of the actions and inside the functions `increment()` and `decrement()`
+- Inside `sagas.js` create a new generator and treat the update, the file should looks like this:
+
+```js
+function* updateAmount({ id, amount }) {
+  if (amount <= 0) {
+    return;
+  }
+
+  const stock = yield call(api.get, `/stock/${id}`);
+  const stockAmount = stock.data.amount;
+
+  if (amount > stockAmount) {
+    toast.error('Quantidade solicitada fora de estoque');
+    return;
+  }
+
+  yield put(updateAmountSuccess(id, amount));
+}
+```
+
+- The export should be like this
+
+```js
+export default all([
+  takeLatest('@cart/ADD_REQUEST', addToCart),
+  takeLatest('@cart/UPDATE_AMOUNT_REQUEST', updateAmount),
+]);
+```
+
+- Now change the reducer that will listen to the `updateAmountSuccess()` from actions
+
+```js
+case '@cart/UPDATE_AMOUNT_SUCCESS': {
+     return produce(state, draft => {
+       const productIndex = draft.findIndex(p => p.id === action.id);
+       if (productIndex >= 0) {
+         draft[productIndex].amount = Number(action.amount);
+       }
+     });
+   }
+```
+
+---
