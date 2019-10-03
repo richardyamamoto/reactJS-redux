@@ -1068,6 +1068,10 @@ export default connection(state => ({
 // End of component
 ```
 
+<<<<<<< HEAD
+=======
+_After Hooks_
+>>>>>>> 365b8db0ce2b75048eb6c9b71b01119c5e5acfa0
 
 - Delete the `export default` from the end of the component
 - Delete the `cartSize`(as property) inside the function parameter
@@ -1075,8 +1079,12 @@ export default connection(state => ({
 **Note**
 Do no forget to `export default function Header(){...}`, OK?
 
+<<<<<<< HEAD
 _After Hooks_
 
+=======
+- Then:
+>>>>>>> 365b8db0ce2b75048eb6c9b71b01119c5e5acfa0
 ```js
 export default function Header(){
   const cartSize = useSelector(state => state.cart.length);
