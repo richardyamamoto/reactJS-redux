@@ -1019,3 +1019,88 @@ export default history;
 ## Using Hooks
 
 [Link to Hooks](https://github.com/richardyamamoto/react-hooks)
+
+### useState and useEffect
+- At the Home component we transform it into a function component
+- Then import
+  - `import React,{ useState, useEffect } from 'react'`
+- Replace the `state={}` with:
+
+```js
+const [products, setProducts] = useState([]);
+```
+- Then replace the `componentDidMount()` with:
+```js
+useEffect(() => {
+    async function loadProducts() {
+      const response = await api.get('products');
+      const data = response.data.map(product => ({
+        ...product,
+        priceFormatted: formatPrice(product.price),
+      }));
+      setProducts(data);
+    }
+    loadProducts();
+  }, []);
+```
+**Note:**
+The async function must be created inside the `useEffect()` and the `setProducts()`(function that set the specific state) will be placed inside too, then we call the recent created async function.
+
+---
+## Redux with Hooks
+
+As we know the Redux create a state observable by all the components. To select the specific state from Redux store we use the `useSelector`
+
+### useSelector
+
+- Import the `useSelector`
+  - Replace the `connection` with `import { useSelector } from 'react-redux'`
+- At the Header component we have the `cartSize` exemple
+
+_Before Hooks_
+```js
+function Header({cartSize}) {
+  // ...Component code...
+}
+export default connection(state => ({
+  cartSize: state.cart.length,
+}))(Header)
+// End of component
+```
+
+
+- Delete the `export default` from the end of the component
+- Delete the `cartSize`(as property) inside the function parameter
+
+**Note**
+Do no forget to `export default function Header(){...}`, OK?
+
+_After Hooks_
+
+```js
+export default function Header(){
+  const cartSize = useSelector(state => state.cart.length);
+// Rest of the code
+}
+```
+
+### useDispatch
+
+When using React Redux, the actions must be dispatched, combined and mapped as properties, but Hooks came to turn things less verbose. So to start we import:
+
+- `import {..., useDispatch } from 'react-redux'`
+- Create a constant to receive the `useDispatch()`
+```js
+const dispatch = useDispatch();
+```
+- Put the dispatch wrapping the action
+
+```js
+function increment(product) {
+    dispatch(CartActions.updateAmountRequest(product.id, product.amount + 1));
+  }
+```
+
+**Note:**
+Do not forget to delete the `mapStateToProps()`, `mapDispatchToProps`, the properties and to put the `CartAction` before the action.
+
