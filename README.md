@@ -984,3 +984,33 @@ case '@cart/UPDATE_AMOUNT_SUCCESS': {
 ```
 
 ---
+
+## Navigation with Saga
+
+After add the product to the cart, we are going to navigate to the cart page using Saga. We are adding the products waiting for an asyncronous request, so we have to wait for the response to be able to navigate. Saga will turn things easier to us.
+ 
+- First install history
+  - `yarn add history`
+- Then inside `src/services` create a history file
+  - `history.js`
+
+```js
+import { createBrowserHistory } from 'history';
+
+const history = createBrowserHistory();
+
+export default history;
+```
+- Now on **App.js**
+  -`import history from './services/history'`
+- Change the `BrowserRouter` component to `Router`
+- Apend a propertie called history with the history as value
+
+```js
+<Router history={history}>
+...
+</Router>
+```
+- The inside `src/store/modules/cart/sagas.js`
+- `import history from '../../../services/history'`
+- Then put the `history.push('/cart')` after `yield put(...)` on `function* addToCart(){}`
