@@ -984,7 +984,6 @@ case '@cart/UPDATE_AMOUNT_SUCCESS': {
 ```
 
 ---
-
 ## Navigation with Saga
 
 After add the product to the cart, we are going to navigate to the cart page using Saga. We are adding the products waiting for an asyncronous request, so we have to wait for the response to be able to navigate. Saga will turn things easier to us.
@@ -1068,23 +1067,14 @@ export default connection(state => ({
 // End of component
 ```
 
-<<<<<<< HEAD
-=======
-_After Hooks_
->>>>>>> 365b8db0ce2b75048eb6c9b71b01119c5e5acfa0
-
 - Delete the `export default` from the end of the component
 - Delete the `cartSize`(as property) inside the function parameter
 
 **Note**
 Do no forget to `export default function Header(){...}`, OK?
 
-<<<<<<< HEAD
 _After Hooks_
 
-=======
-- Then:
->>>>>>> 365b8db0ce2b75048eb6c9b71b01119c5e5acfa0
 ```js
 export default function Header(){
   const cartSize = useSelector(state => state.cart.length);
@@ -1111,4 +1101,3 @@ function increment(product) {
 
 **Note:**
 Do not forget to delete the `mapStateToProps()`, `mapDispatchToProps`, the properties and to put the `CartAction` before the action.
-
